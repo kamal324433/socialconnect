@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react'
 
 export default function PageHero({ title, subtitle, description, image, buttons, backgroundGradient = 'from-primary via-indigo-600 to-purple-600' }) {
   return (
-    <section className={`relative py-24 md:py-32 bg-gradient-to-r ${backgroundGradient} overflow-hidden`}>
+    <section className={`relative py-16 md:py-32 bg-gradient-to-r ${backgroundGradient} overflow-hidden`}>
       {/* Background Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
@@ -11,7 +11,7 @@ export default function PageHero({ title, subtitle, description, image, buttons,
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="animate-fade-in-up">
-            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight break-words">
               {title}
             </h1>
 
@@ -30,7 +30,7 @@ export default function PageHero({ title, subtitle, description, image, buttons,
                 {buttons.map((btn, idx) => (
                   <button
                     key={idx}
-                    className={`px-8 py-3 font-semibold rounded-lg transition-all flex items-center justify-center ${
+                    className={`w-full sm:w-auto px-8 py-3 font-semibold rounded-lg transition-all flex items-center justify-center ${
                       btn.primary
                         ? 'bg-white text-primary hover:bg-gray-100 shadow-lg hover:shadow-2xl'
                         : 'bg-transparent text-white border-2 border-white hover:bg-white hover:text-primary'

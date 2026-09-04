@@ -10,9 +10,9 @@ import About from './pages/About'
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="app bg-white">
         <Navbar />
-        <main className="flex-grow">
+        <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/challenges" element={<Challenges />} />

@@ -38,14 +38,9 @@ export default function Collaboration() {
 
           {/* Center - Collaborate Badge */}
           <div className="flex justify-center items-center">
-            <div className="relative">
-              <div className="absolute -inset-3 bg-gradient-primary rounded-full blur opacity-30"></div>
-              <div className="relative bg-gradient-primary text-white rounded-full p-8">
-                <div className="text-center">
-                  <Rocket className="h-12 w-12 mx-auto mb-3" />
-                  <h3 className="text-xl font-bold">COLLABORATE</h3>
-                </div>
-              </div>
+            <div className="bg-blue-50 border border-blue-100 rounded-full p-8 w-40 h-40 flex flex-col items-center justify-center shadow-sm">
+              <Rocket className="h-8 w-8 text-blue-600 mb-2" />
+              <h3 className="text-sm font-bold text-blue-900 tracking-widest uppercase">Collaborate</h3>
             </div>
           </div>
 

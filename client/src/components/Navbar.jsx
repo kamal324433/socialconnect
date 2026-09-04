@@ -18,17 +18,15 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-gray-200/50 shadow-sm">
-      <div className="container">
-        <div className="flex justify-between items-center h-16 md:h-20 px-2 md:px-0">
+      <div className="w-full px-4 lg:px-8">
+        <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo - Left Side */}
           <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center space-x-2 group">
-              <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-transform">
-                <span className="text-white font-bold text-lg">SC</span>
-              </div>
+            <Link to="/" className="flex items-center space-x-2 group lg:-ml-4">
+              <img src="/logo.jpg" alt="SocialConnect Logo" className="w-16 h-16 rounded-xl object-cover transform group-hover:scale-110 transition-transform lg:-ml-2" />
               <div className="hidden sm:block">
                 <h1 className="text-2xl font-black gradient-text">SocialConnect</h1>
-                <p className="text-xs text-gray-500">Innovation Platform</p>
+                <p className="text-xs text-gray-500 ml-1">Innovation Platform</p>
               </div>
             </Link>
           </div>
@@ -37,12 +35,12 @@ export default function Navbar() {
           <div className="hidden md:flex flex-1"></div>
 
           {/* Desktop Navigation - Right Side */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-4 py-2 text-sm font-semibold transition-all duration-300 relative ${
+                className={`px-3 py-2 text-sm font-semibold transition-all duration-300 relative ${
                   isActive(item.path)
                     ? 'text-primary'
                     : 'text-gray-700 hover:text-primary'
@@ -50,20 +48,20 @@ export default function Navbar() {
               >
                 {item.name}
                 {isActive(item.path) && (
-                  <span className="absolute bottom-0 left-4 right-4 h-1 bg-gradient-primary rounded-full"></span>
+                  <span className="absolute bottom-0 left-3 right-3 h-1 bg-gradient-primary rounded-full"></span>
                 )}
               </Link>
             ))}
           </div>
 
           {/* Desktop Buttons - Right Side */}
-          <div className="hidden md:flex items-center space-x-3 ml-6">
+          <div className="hidden md:flex items-center space-x-2 flex-shrink-0">
             <Link to="/challenges">
-              <button className="px-5 py-2.5 text-sm font-semibold text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-300 hover:shadow-md">
+              <button className="whitespace-nowrap px-5 py-2.5 text-sm font-semibold text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-300 hover:shadow-md">
                 Explore
               </button>
             </Link>
-            <button className="px-5 py-2.5 text-sm font-semibold bg-gradient-primary text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105">
+            <button className="whitespace-nowrap px-5 py-2.5 text-sm font-semibold text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-300 hover:shadow-md">
               Submit Challenge
             </button>
           </div>
@@ -107,7 +105,7 @@ export default function Navbar() {
                     Explore Challenges
                   </button>
                 </Link>
-                <button className="px-4 py-2.5 w-full text-sm font-semibold bg-gradient-primary text-white rounded-lg hover:shadow-lg transition-all duration-300">
+                <button className="px-4 py-2.5 w-full text-sm font-semibold text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
                   Submit Challenge
                 </button>
               </div>

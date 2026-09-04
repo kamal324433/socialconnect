@@ -54,17 +54,24 @@ export default function WhySocialConnect() {
             return (
               <div
                 key={index}
-                className="hover-lift p-8 bg-white rounded-2xl border border-gray-200"
+                className="group relative p-8 bg-white rounded-2xl border border-gray-200/80 hover:border-gray-300 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden cursor-default outline-none"
                 style={{
                   animationDelay: `${index * 0.08}s`,
                   animation: 'fadeInUp 0.6s ease-out forwards',
                 }}
               >
-                <div className={`flex items-center justify-center h-14 w-14 rounded-full ${feature.color} mb-6`}>
-                  <Icon size={28} />
+                
+                <div className={`flex items-center justify-center h-12 w-12 rounded-lg ${feature.color} mb-6 transition-transform duration-300 group-hover:-translate-y-1`}>
+                  <Icon size={24} />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                
+                <h3 className="text-lg font-bold text-gray-900 mb-3 tracking-tight group-hover:text-blue-700 transition-colors duration-300">
+                  {feature.title}
+                </h3>
+                
+                <p className="text-gray-600 leading-relaxed text-sm">
+                  {feature.description}
+                </p>
               </div>
             )
           })}
