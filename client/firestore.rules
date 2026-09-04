@@ -1,0 +1,111 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function myProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function myRole() {
+      return isSignedIn() ? myProfile().role : null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && myRole() == 'admin';
+    }
+
+    // -------------------------------------------------------------------------
+    // users — profile readable by all signed-in users (needed for routing &
+    // attribution). Only the owner or an admin can write it.
+    // -------------------------------------------------------------------------
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // challenges — anyone signed in can read (transparency); the submitter can
+    // create; the submitter, assigned university or admin can update; only
+    // admin can delete.
+    // -------------------------------------------------------------------------
+    match /challenges/{challengeId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.submittedBy == request.auth.uid;
+      allow update: if isSignedIn() && (
+        resource.data.submittedBy == request.auth.uid ||
+        resource.data.assignedUniversityId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // projects — readable by all signed-in users (industry needs to browse);
+    // writable by the owning university, industry partners or admin.
+    // -------------------------------------------------------------------------
+    match /projects/{projectId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && myRole() == 'university' && request.resource.data.universityId == request.auth.uid;
+      allow update: if isSignedIn() && (
+        resource.data.universityId == request.auth.uid ||
+        myRole() == 'industry' ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // notifications — a user can only read/update their own. Cloud Functions
+    // (Admin SDK) bypass rules and can write for anyone.
+    // -------------------------------------------------------------------------
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // -------------------------------------------------------------------------
+    // analytics — read-only for all signed-in users; only admin can write.
+    // (Cloud Functions write this via Admin SDK which bypasses rules.)
+    // -------------------------------------------------------------------------
+    match /analytics/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // partnerships — readable by signed-in users; industry can propose new
+    // partnerships; university can accept/reject their own; admin can do all.
+    // -------------------------------------------------------------------------
+    match /partnerships/{partnershipId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (myRole() == 'industry' || myRole() == 'university' || isAdmin());
+      allow update: if isSignedIn() && (
+        resource.data.industryId == request.auth.uid ||
+        resource.data.universityId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // feedback — any signed-in user can read all feedback (public
+    // accountability); only the submitter can create and update their own.
+    // -------------------------------------------------------------------------
+    match /feedback/{feedbackId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.submittedBy == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.submittedBy == request.auth.uid;
+      allow delete: if isAdmin();
+    }
+
+  }
+}
