@@ -43,7 +43,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-navy-100 bg-white/90 shadow-sm backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-4 transition-opacity hover:opacity-90">
+        <Link href="/" className="flex items-center gap-4 transition-opacity hover:opacity-90 -ml-2 md:-ml-8">
           <div className="flex flex-col sm:flex">
             <span className="font-serif text-xl md:text-3xl font-bold tracking-tight text-navy-900 leading-none">
               Social<span className="text-saffron-700">Connect</span>
@@ -55,7 +55,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-8 lg:ml-10">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -78,7 +78,7 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4 lg:-mr-8">
           {user && profile ? (
             <>
               <NotificationBell />
