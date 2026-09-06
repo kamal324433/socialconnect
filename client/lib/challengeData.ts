@@ -60,7 +60,7 @@ export const CHALLENGES: Challenge[] = [
     date: '2024-09-01',
     support: 312,
     submittedBy: 'Resident Welfare Association, Ward 12',
-    proposedSolution: 'NIT Jamshedpur's Civil Engineering department has proposed a dual-channel drainage system with automated silt traps. Industry partner TATA Projects has agreed to provide construction supervision. Pilot covers 800m of road and is scheduled for completion by December 2024.',
+    proposedSolution: "NIT Jamshedpur's Civil Engineering department has proposed a dual-channel drainage system with automated silt traps. Industry partner TATA Projects has agreed to provide construction supervision. Pilot covers 800m of road and is scheduled for completion by December 2024.",
     progress: 65,
   },
   {
@@ -68,7 +68,7 @@ export const CHALLENGES: Challenge[] = [
     title: 'Illegal Waste Dumping Near Lake Boundary',
     category: 'Environment',
     description: 'Unidentified vehicles are dumping industrial and construction waste near the lake premises overnight, severely polluting the water body.',
-    fullDescription: 'For the past 18 months, unidentified trucks have been illegally dumping industrial effluents and construction debris along a 1.2 km stretch of the lake's northern boundary between 10 PM and 3 AM. Water quality testing by a local NGO reveals heavy metal contamination at 4x permissible limits. The lake is a primary source of irrigation water for 6 surrounding villages and supports local fishing livelihoods for approximately 800 families. The Jharkhand State Pollution Control Board has been notified but enforcement remains inadequate.',
+    fullDescription: "For the past 18 months, unidentified trucks have been illegally dumping industrial effluents and construction debris along a 1.2 km stretch of the lake's northern boundary between 10 PM and 3 AM. Water quality testing by a local NGO reveals heavy metal contamination at 4x permissible limits. The lake is a primary source of irrigation water for 6 surrounding villages and supports local fishing livelihoods for approximately 800 families. The Jharkhand State Pollution Control Board has been notified but enforcement remains inadequate.",
     location: 'North Lake Zone',
     district: 'Dhanbad',
     priority: 'critical',
@@ -108,7 +108,7 @@ export const CHALLENGES: Challenge[] = [
     date: '2024-07-20',
     support: 189,
     submittedBy: 'Block Education Officer, Khunti',
-    proposedSolution: 'BIT Mesra's Computer Science department has designed a Solar-Powered Computer Lab Kit — a self-contained unit with 10 refurbished computers, a Raspberry Pi-based local server, and offline educational content. Industry partner Wipro has committed 20 units under their CSR programme.',
+    proposedSolution: "BIT Mesra's Computer Science department has designed a Solar-Powered Computer Lab Kit — a self-contained unit with 10 refurbished computers, a Raspberry Pi-based local server, and offline educational content. Industry partner Wipro has committed 20 units under their CSR programme.",
     progress: 55,
   },
   {
@@ -140,7 +140,7 @@ export const CHALLENGES: Challenge[] = [
     date: '2024-08-10',
     support: 341,
     submittedBy: 'Gram Panchayat, Rajmahal',
-    proposedSolution: 'NIT Jamshedpur's Environmental Engineering team is assessing a community-scale reverse osmosis and iron removal plant. A parallel proposal involves pipeline replacement using HDPE pipes rated for 25+ years. Funding is being sought under Jal Jeevan Mission.',
+    proposedSolution: "NIT Jamshedpur's Environmental Engineering team is assessing a community-scale reverse osmosis and iron removal plant. A parallel proposal involves pipeline replacement using HDPE pipes rated for 25+ years. Funding is being sought under Jal Jeevan Mission.",
     progress: 20,
   },
   {
@@ -172,7 +172,7 @@ export const CHALLENGES: Challenge[] = [
     date: '2024-06-15',
     support: 389,
     submittedBy: 'Bero Farmers Collective',
-    proposedSolution: 'Jharkhand Rai University's Agriculture department has designed a micro-watershed management plan combining check dam construction, drip irrigation rollout, and shift to drought-resistant crop varieties. NABARD is being approached for capital subsidy and an industry agritech partner is providing precision farming tools.',
+    proposedSolution: "Jharkhand Rai University's Agriculture department has designed a micro-watershed management plan combining check dam construction, drip irrigation rollout, and shift to drought-resistant crop varieties. NABARD is being approached for capital subsidy and an industry agritech partner is providing precision farming tools.",
     progress: 70,
   },
   {
@@ -188,7 +188,7 @@ export const CHALLENGES: Challenge[] = [
     date: '2024-08-01',
     support: 412,
     submittedBy: 'Resident Welfare Council, New Colonies',
-    proposedSolution: 'XLRI Jamshedpur's Operations Management team is modelling optimal bus route extensions using geographic demand mapping. The proposal includes a demand-responsive mini-bus service using a mobile app-based booking system as an interim measure before formal route integration.',
+    proposedSolution: "XLRI Jamshedpur's Operations Management team is modelling optimal bus route extensions using geographic demand mapping. The proposal includes a demand-responsive mini-bus service using a mobile app-based booking system as an interim measure before formal route integration.",
     progress: 35,
   },
   {
@@ -204,7 +204,7 @@ export const CHALLENGES: Challenge[] = [
     date: '2024-07-28',
     support: 298,
     submittedBy: 'Village Development Committee, Chakradharpur',
-    proposedSolution: 'IIT (ISM) Dhanbad's Electrical Engineering department has proposed a hybrid micro-grid solution: a 50kW solar PV installation with battery storage to provide reliable daytime power, complemented by a new dedicated transformer for night-time grid connectivity. Total estimated cost: ₹28 lakhs.',
+    proposedSolution: "IIT (ISM) Dhanbad's Electrical Engineering department has proposed a hybrid micro-grid solution: a 50kW solar PV installation with battery storage to provide reliable daytime power, complemented by a new dedicated transformer for night-time grid connectivity. Total estimated cost: ₹28 lakhs.",
     progress: 30,
   },
   {
@@ -212,7 +212,7 @@ export const CHALLENGES: Challenge[] = [
     title: 'Limited Skill-Based Employment Opportunities for Youth',
     category: 'Employment',
     description: 'Over 4,000 youth in the block are unemployed due to a mismatch between their educational qualifications and available local job market requirements.',
-    fullDescription: 'The Latehar district has an estimated 4,200 unemployed youth between ages 18–35 who have at least a Class 10 qualification but lack market-relevant vocational skills. The three nearest Industrial Training Institutes offer only 4 outdated trade courses (welding, electrical fitting, plumbing) with no placement linkages. Meanwhile, the district's growing manufacturing sector and service industry have 1,400 unfilled positions requiring skills in areas like CNC operation, IT support, solar panel installation, and healthcare assistance. A 2024 district employment survey confirmed a severe structural skills mismatch with no institutional mechanism to bridge it.',
+    fullDescription: "The Latehar district has an estimated 4,200 unemployed youth between ages 18–35 who have at least a Class 10 qualification but lack market-relevant vocational skills. The three nearest Industrial Training Institutes offer only 4 outdated trade courses (welding, electrical fitting, plumbing) with no placement linkages. Meanwhile, the district's growing manufacturing sector and service industry have 1,400 unfilled positions requiring skills in areas like CNC operation, IT support, solar panel installation, and healthcare assistance. A 2024 district employment survey confirmed a severe structural skills mismatch with no institutional mechanism to bridge it.",
     location: 'Latehar Urban & Peri-Urban',
     district: 'Latehar',
     priority: 'medium',
@@ -236,7 +236,7 @@ export const CHALLENGES: Challenge[] = [
     date: '2024-08-20',
     support: 167,
     submittedBy: 'District Collector Office, Pakur',
-    proposedSolution: 'BIT Mesra's IT department has designed a Panchayat Digital Service Van — a vehicle-mounted mobile CSC with a VSAT internet connection, biometric device, and a local services agent trained to assist residents. The van follows a weekly rotation schedule across all 18 GPs. The model is designed for scale across other underserved blocks.',
+    proposedSolution: "BIT Mesra's IT department has designed a Panchayat Digital Service Van — a vehicle-mounted mobile CSC with a VSAT internet connection, biometric device, and a local services agent trained to assist residents. The van follows a weekly rotation schedule across all 18 GPs. The model is designed for scale across other underserved blocks.",
     progress: 40,
   },
   {
@@ -252,7 +252,7 @@ export const CHALLENGES: Challenge[] = [
     date: '2024-07-12',
     support: 221,
     submittedBy: 'Mahila Vikas Sangh, Jamshedpur',
-    proposedSolution: 'XLRI Jamshedpur's Social Enterprise division has proposed converting 4 underutilised government-owned plots (ranging from 1,000–1,500 sq. ft.) into Community Livelihood Centres. Each centre will house a crèche, an SHG workspace, a digital literacy corner, and a legal aid clinic. Design and build managed by student teams under faculty supervision.',
+    proposedSolution: "XLRI Jamshedpur's Social Enterprise division has proposed converting 4 underutilised government-owned plots (ranging from 1,000–1,500 sq. ft.) into Community Livelihood Centres. Each centre will house a crèche, an SHG workspace, a digital literacy corner, and a legal aid clinic. Design and build managed by student teams under faculty supervision.",
     progress: 55,
   },
   {

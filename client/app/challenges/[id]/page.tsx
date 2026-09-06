@@ -27,7 +27,7 @@ const PRIORITY_STYLES: Record<Priority, string> = {
 };
 
 const STATUS_LABELS: Record<Status, string> = {
-  submitted: 'Submitted', ai_verified: 'AI Verified', under_review: 'Under Review',
+  submitted: 'Reported', ai_verified: 'AI Verified', under_review: 'Under Review',
   assigned: 'Assigned', in_progress: 'In Progress', resolved: 'Resolved',
 };
 

@@ -77,14 +77,40 @@ export default function RegisterPage() {
   const [district, setDistrict] = useState('');
   const [stateVal, setStateVal] = useState('Jharkhand');
   const [sector, setSector] = useState('');
+  
+  // Validation errors
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
   const needsOrg = role !== 'citizen';
 
+  const validate = () => {
+    const errors: Record<string, string> = {};
+    if (!name.trim()) errors.name = 'Full name is required';
+    if (!email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    if (!password) {
+      errors.password = 'Password is required';
+    } else if (password.length < 6) {
+      errors.password = 'Password must be at least 6 characters long';
+    }
+    if (needsOrg && !organization.trim()) errors.organization = 'Organization name is required';
+    if (!stateVal) errors.stateVal = 'State is required';
+    if (!district) errors.district = 'District is required';
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
+
     setLoading(true);
     setError('');
     try {
@@ -92,7 +118,7 @@ export default function RegisterPage() {
       router.push('/');
     } catch (err: any) {
       if (err.code === 'auth/email-already-in-use' || err.message?.includes('email-already-in-use')) {
-        setError('Yeh email pehle se registered hai! Kripya niche "Sign in" par click karein.');
+        setError('This email is already registered! Please click "Sign in" below.');
       } else {
         setError(err.message?.replace('Firebase: ', '') || 'Could not create your account.');
       }
@@ -130,23 +156,27 @@ export default function RegisterPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium text-navy-700">Full name</label>
-              <input required value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+              <input required value={name} onChange={(e) => { setName(e.target.value); setFieldErrors(prev => ({...prev, name: ''})); }} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+              {fieldErrors.name && <p className="mt-1 text-xs text-brick">{fieldErrors.name}</p>}
             </div>
             <div>
               <label className="mb-1 block text-sm font-medium text-navy-700">Email</label>
-              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+              <input type="email" required value={email} onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => ({...prev, email: ''})); }} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+              {fieldErrors.email && <p className="mt-1 text-xs text-brick">{fieldErrors.email}</p>}
             </div>
           </div>
 
           <div>
             <label className="mb-1 block text-sm font-medium text-navy-700">Password</label>
-            <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+            <input type="password" required minLength={6} value={password} onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => ({...prev, password: ''})); }} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+            {fieldErrors.password && <p className="mt-1 text-xs text-brick">{fieldErrors.password}</p>}
           </div>
 
           {needsOrg && (
             <div>
               <label className="mb-1 block text-sm font-medium text-navy-700">Organization name</label>
-              <input required value={organization} onChange={(e) => setOrganization(e.target.value)} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+              <input required value={organization} onChange={(e) => { setOrganization(e.target.value); setFieldErrors(prev => ({...prev, organization: ''})); }} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+              {fieldErrors.organization && <p className="mt-1 text-xs text-brick">{fieldErrors.organization}</p>}
             </div>
           )}
 
@@ -158,7 +188,7 @@ export default function RegisterPage() {
                 <select
                   required
                   value={stateVal}
-                  onChange={(e) => { setStateVal(e.target.value); setDistrict(''); }}
+                  onChange={(e) => { setStateVal(e.target.value); setDistrict(''); setFieldErrors(prev => ({...prev, stateVal: ''})); }}
                   className={SELECT_CLASS}
                 >
                   <option value="">— Select State —</option>
@@ -171,6 +201,7 @@ export default function RegisterPage() {
                 </select>
                 <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-navy-400">▾</span>
               </div>
+              {fieldErrors.stateVal && <p className="mt-1 text-xs text-brick">{fieldErrors.stateVal}</p>}
             </div>
 
             <div>
@@ -180,7 +211,7 @@ export default function RegisterPage() {
                   <select
                     required
                     value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
+                    onChange={(e) => { setDistrict(e.target.value); setFieldErrors(prev => ({...prev, district: ''})); }}
                     className={SELECT_CLASS}
                   >
                     <option value="">— Select District —</option>
@@ -194,11 +225,12 @@ export default function RegisterPage() {
                 <input
                   required
                   value={district}
-                  onChange={(e) => setDistrict(e.target.value)}
+                  onChange={(e) => { setDistrict(e.target.value); setFieldErrors(prev => ({...prev, district: ''})); }}
                   placeholder="Enter your district"
                   className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none"
                 />
               )}
+              {fieldErrors.district && <p className="mt-1 text-xs text-brick">{fieldErrors.district}</p>}
             </div>
           </div>
 

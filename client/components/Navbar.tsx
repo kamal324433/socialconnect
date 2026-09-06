@@ -34,7 +34,7 @@ export default function Navbar() {
   const handleSignOut = async () => {
     await signOut();
     setIsMobileMenuOpen(false);
-    router.push('/');
+    router.push('/login');
   };
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);

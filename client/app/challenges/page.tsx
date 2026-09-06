@@ -9,6 +9,7 @@ import {
   Wifi, Baby, Accessibility, Filter, X, ChevronDown
 } from 'lucide-react';
 import { CHALLENGES, ALL_CATEGORIES, type Challenge, type Priority, type Status } from '@/lib/challengeData';
+import { Button, Card, StatusPill, PriorityPill } from '@/components/ui';
 
 /* ─── Category → Icon mapping ─────────────────────────────────── */
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
@@ -28,31 +29,7 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Accessibility':        Accessibility,
 };
 
-/* ─── Priority & Status display helpers ───────────────────────── */
-const PRIORITY_STYLES: Record<Priority, string> = {
-  critical: 'bg-brick text-white',
-  high:     'bg-brick-100 text-brick',
-  medium:   'bg-saffron-100 text-saffron-700',
-  low:      'bg-navy-100 text-navy-500',
-};
 
-const STATUS_STYLES: Record<Status, string> = {
-  submitted:    'bg-navy-100 text-navy-700',
-  ai_verified:  'bg-saffron-100 text-saffron-700',
-  under_review: 'bg-saffron-100 text-saffron-700',
-  assigned:     'bg-teal-100 text-teal-700',
-  in_progress:  'bg-teal-100 text-teal-700',
-  resolved:     'bg-moss-100 text-moss',
-};
-
-const STATUS_LABELS: Record<Status, string> = {
-  submitted:    'Submitted',
-  ai_verified:  'AI Verified',
-  under_review: 'Under Review',
-  assigned:     'Assigned',
-  in_progress:  'In Progress',
-  resolved:     'Resolved',
-};
 
 type SortOption = 'most_recent' | 'highest_priority' | 'most_supported' | 'in_progress' | 'resolved';
 
@@ -236,12 +213,13 @@ export default function ChallengesPage() {
             <Search size={32} className="mx-auto mb-3 text-navy-300" />
             <p className="font-semibold text-navy-700">No challenges match your search</p>
             <p className="mt-1 text-sm text-navy-500">Try a different keyword or clear the category filter.</p>
-            <button
+            <Button
+              variant="outline"
               onClick={() => { handleSearch(''); handleCategoryChange('All'); }}
-              className="mt-4 rounded-sm border border-navy-300 px-4 py-2 text-sm font-medium text-navy-700 hover:border-navy"
+              className="mt-4"
             >
               Clear all filters
-            </button>
+            </Button>
           </div>
         )}
 
@@ -256,12 +234,12 @@ export default function ChallengesPage() {
         {visible.length > 0 && (
           <div className="mt-10 text-center">
             {hasMore ? (
-              <button
+              <Button
+                variant="outline"
                 onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
-                className="rounded-sm border border-navy-300 px-6 py-2.5 text-sm font-medium text-navy-700 transition hover:border-navy hover:bg-navy-50 hover:text-navy"
               >
                 Load More Challenges ({filtered.length - visibleCount} remaining)
-              </button>
+              </Button>
             ) : filtered.length > PAGE_SIZE ? (
               <p className="text-sm font-medium text-navy-500">✓ All {filtered.length} challenges loaded</p>
             ) : null}
@@ -277,7 +255,8 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
   const Icon = CATEGORY_ICONS[challenge.category] || Tag;
 
   return (
-    <div className="group flex flex-col rounded-xl border border-navy-100 bg-white p-5 shadow-sm transition hover:border-saffron-300 hover:shadow-md">
+    <Card className="group flex flex-col p-0 transition hover:border-saffron-300 hover:shadow-md h-full">
+      <div className="p-5 flex flex-col h-full">
       {/* Category */}
       <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-saffron-700">
         <Icon size={13} />
@@ -302,12 +281,8 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
 
       {/* Priority + Status pills */}
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className={`rounded-sm px-2 py-0.5 text-xs font-semibold capitalize ${PRIORITY_STYLES[challenge.priority]}`}>
-          {challenge.priority}
-        </span>
-        <span className={`rounded-sm px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[challenge.status]}`}>
-          {STATUS_LABELS[challenge.status]}
-        </span>
+        <PriorityPill priority={challenge.priority} />
+        <StatusPill status={challenge.status} />
         <span className="ml-auto flex items-center gap-1 text-xs text-navy-400">
           <ThumbsUp size={11} /> {challenge.support}
         </span>
@@ -323,6 +298,7 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
           <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
         </Link>
       </div>
-    </div>
+      </div>
+    </Card>
   );
 }

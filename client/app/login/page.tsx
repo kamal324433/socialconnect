@@ -11,12 +11,30 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  const validate = () => {
+    const errors: Record<string, string> = {};
+    if (!email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    if (!password) {
+      errors.password = 'Password is required';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
+
     setLoading(true);
     setError('');
     try {
@@ -25,13 +43,13 @@ export default function LoginPage() {
     } catch (err: any) {
       const code = err.code || '';
       if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/wrong-password') {
-        setError('Email ya password galat hai. Dobara check karein.');
+        setError('Incorrect email or password. Please try again.');
       } else if (code === 'auth/too-many-requests') {
-        setError('Bahut zyada attempts! Kuch der baad dobara try karein.');
+        setError('Too many attempts! Please try again later.');
       } else if (code === 'auth/user-disabled') {
-        setError('Aapka account disable kar diya gaya hai. Admin se contact karein.');
+        setError('Your account has been disabled. Please contact support.');
       } else {
-        setError('Sign in nahi ho saka. Please internet connection check karein.');
+        setError(err.message || 'Could not sign in. Please check your connection.');
       }
     } finally {
       setLoading(false);
@@ -46,11 +64,13 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="mb-1 block text-sm font-medium text-navy-700">Email</label>
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+            <input type="email" required value={email} onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => ({...prev, email: ''})); }} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+            {fieldErrors.email && <p className="mt-1 text-xs text-brick">{fieldErrors.email}</p>}
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-navy-700">Password</label>
-            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+            <input type="password" required value={password} onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => ({...prev, password: ''})); }} className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none" />
+            {fieldErrors.password && <p className="mt-1 text-xs text-brick">{fieldErrors.password}</p>}
           </div>
           {error && <p className="text-sm text-brick">{error}</p>}
           <Button type="submit" disabled={loading || googleLoading} className="w-full">{loading ? 'Signing in…' : 'Sign in'}</Button>

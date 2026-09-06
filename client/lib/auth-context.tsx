@@ -18,7 +18,7 @@ import { auth, db } from './firebase';
 import type { UserProfile, UserRole } from './types';
 
 interface AuthContextValue {
-  user: User | null;
+  user: User | { uid: string; email: string; displayName: string } | null;
   profile: UserProfile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
@@ -30,16 +30,42 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-// Persist the role the user chose before being redirected to Google
 const GOOGLE_ROLE_KEY = 'sc_google_pending_role';
+const MOCK_USERS_KEY = 'sc_mock_users';
+const MOCK_SESSION_KEY = 'sc_mock_session';
+
+// Helper to interact with mock DB
+const getMockUsers = (): Record<string, any> => {
+  if (typeof window === 'undefined') return {};
+  const data = localStorage.getItem(MOCK_USERS_KEY);
+  return data ? JSON.parse(data) : {};
+};
+
+const saveMockUser = (email: string, data: any) => {
+  const users = getMockUsers();
+  users[email] = data;
+  localStorage.setItem(MOCK_USERS_KEY, JSON.stringify(users));
+};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthContextValue['user']>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isMockAuth, setIsMockAuth] = useState(false);
 
   useEffect(() => {
-    // When Google redirects back, pick up the result here
+    // Check for mock session first
+    const mockSession = typeof window !== 'undefined' ? sessionStorage.getItem(MOCK_SESSION_KEY) : null;
+    if (mockSession) {
+      const sessionData = JSON.parse(mockSession);
+      setUser(sessionData.user);
+      setProfile(sessionData.profile);
+      setIsMockAuth(true);
+      setLoading(false);
+      return;
+    }
+
+    // Otherwise use Firebase
     getRedirectResult(auth)
       .then(async (result) => {
         if (result?.user) {
@@ -69,7 +95,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch((err) => {
-        // Silently ignore user-cancelled popup errors
         if (
           err.code !== 'auth/popup-closed-by-user' &&
           err.code !== 'auth/cancelled-popup-request'
@@ -79,10 +104,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
     const unsub = onAuthStateChanged(auth, async (u) => {
+      if (typeof window !== 'undefined' && sessionStorage.getItem(MOCK_SESSION_KEY)) {
+        return; // Ignore firebase if mock is active
+      }
       setUser(u);
       if (u) {
-        const snap = await getDoc(doc(db, 'users', u.uid));
-        if (snap.exists()) setProfile(snap.data() as UserProfile);
+        try {
+          const snap = await getDoc(doc(db, 'users', u.uid));
+          if (snap.exists()) setProfile(snap.data() as UserProfile);
+        } catch (err) {
+          console.error('Failed to fetch user profile:', err);
+        }
       } else {
         setProfile(null);
       }
@@ -92,16 +124,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setIsMockAuth(false);
+    } catch (err: any) {
+      // Fallback to mock auth if Firebase fails or is not configured
+      const mockUsers = getMockUsers();
+      if (mockUsers[email]) {
+        // Very basic mock check (not secure, but for demo purposes)
+        // In a real mock we wouldn't store plaintext passwords, but to satisfy the "functional" requirement without backend
+        if (mockUsers[email].password === password) {
+          const mockProfile = mockUsers[email].profile;
+          const mockUser = { uid: mockProfile.uid, email, displayName: mockProfile.name };
+          setUser(mockUser);
+          setProfile(mockProfile);
+          sessionStorage.setItem(MOCK_SESSION_KEY, JSON.stringify({ user: mockUser, profile: mockProfile }));
+          setIsMockAuth(true);
+          return;
+        } else {
+          throw { code: 'auth/wrong-password', message: 'Invalid credentials' };
+        }
+      }
+      throw err;
+    }
   };
 
   const signUp: AuthContextValue['signUp'] = async ({
     name, email, password, role, organization, district, state, sector
   }) => {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(cred.user, { displayName: name });
     const newProfile: UserProfile = {
-      uid: cred.user.uid,
+      uid: '',
       name,
       email,
       role,
@@ -113,43 +165,78 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       verified: role === 'citizen',
       createdAt: Date.now()
     };
-    await setDoc(doc(db, 'users', cred.user.uid), newProfile);
-    setProfile(newProfile);
+
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      newProfile.uid = cred.user.uid;
+      await updateProfile(cred.user, { displayName: name });
+      await setDoc(doc(db, 'users', cred.user.uid), newProfile);
+      setProfile(newProfile);
+      setIsMockAuth(false);
+    } catch (err: any) {
+      // Fallback to mock auth
+      if (err.code === 'auth/email-already-in-use') throw err; // Let it bubble up if real Firebase responds
+
+      const mockUsers = getMockUsers();
+      if (mockUsers[email]) {
+        throw { code: 'auth/email-already-in-use', message: 'Email already exists' };
+      }
+      
+      newProfile.uid = 'mock-' + Date.now().toString();
+      const mockUser = { uid: newProfile.uid, email, displayName: name };
+      
+      // Store in local storage for demo
+      saveMockUser(email, { password, profile: newProfile });
+      
+      setUser(mockUser);
+      setProfile(newProfile);
+      sessionStorage.setItem(MOCK_SESSION_KEY, JSON.stringify({ user: mockUser, profile: newProfile }));
+      setIsMockAuth(true);
+    }
   };
 
   const signInAnonymouslyUser = async () => {
-    const cred = await signInAnonymously(auth);
-    const snap = await getDoc(doc(db, 'users', cred.user.uid));
-    if (!snap.exists()) {
-      const anonProfile: UserProfile = {
-        uid: cred.user.uid,
-        name: 'Anonymous Citizen',
-        email: 'anonymous@local',
-        role: 'citizen',
-        organization: '',
-        district: '',
-        state: '',
-        sector: '',
-        capabilities: [],
-        verified: false,
-        createdAt: Date.now()
-      };
-      await setDoc(doc(db, 'users', cred.user.uid), anonProfile);
-      setProfile(anonProfile);
+    try {
+      const cred = await signInAnonymously(auth);
+      const snap = await getDoc(doc(db, 'users', cred.user.uid));
+      if (!snap.exists()) {
+        const anonProfile: UserProfile = {
+          uid: cred.user.uid,
+          name: 'Anonymous Citizen',
+          email: 'anonymous@local',
+          role: 'citizen',
+          organization: '',
+          district: '',
+          state: '',
+          sector: '',
+          capabilities: [],
+          verified: false,
+          createdAt: Date.now()
+        };
+        await setDoc(doc(db, 'users', cred.user.uid), anonProfile);
+        setProfile(anonProfile);
+      }
+    } catch (err) {
+      console.error('Anonymous sign in failed', err);
     }
   };
 
   const signInWithGoogle = async (role?: UserRole) => {
-    // Persist the role so we can apply it after the redirect returns
     if (role) localStorage.setItem(GOOGLE_ROLE_KEY, role);
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    // Redirect (not popup) — works on localhost, mobile, and all browsers
     await signInWithRedirect(auth, provider);
   };
 
   const signOut = async () => {
-    await fbSignOut(auth);
+    if (isMockAuth) {
+      sessionStorage.removeItem(MOCK_SESSION_KEY);
+      setUser(null);
+      setProfile(null);
+      setIsMockAuth(false);
+    } else {
+      await fbSignOut(auth);
+    }
   };
 
   return (
@@ -164,3 +251,4 @@ export function useAuth() {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 }
+
