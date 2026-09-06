@@ -24,6 +24,7 @@ export interface UserProfile {
   sector?: string;                 // for industry/university: subject domain
   capabilities?: string[];         // for universities: departments/expertise tags
   phone?: string;
+  photoUrl?: string;
   verified: boolean;
   createdAt: number;
 }

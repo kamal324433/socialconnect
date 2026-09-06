@@ -82,10 +82,10 @@ export default function Navbar() {
           {user && profile ? (
             <>
               <NotificationBell />
-              <div className="flex flex-col items-end mr-2">
-                <span className="text-sm font-medium text-navy-900">{profile.name}</span>
+              <Link href="/profile" className="flex flex-col items-end mr-2 hover:opacity-80 transition cursor-pointer">
+                <span className="text-sm font-medium text-navy-900 hover:text-saffron-700">{profile.name}</span>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-saffron-700">{profile.role}</span>
-              </div>
+              </Link>
               <button
                 onClick={handleSignOut}
                 className="rounded-lg border border-navy-200 bg-paper px-4 py-2 text-sm font-semibold text-navy-700 shadow-sm transition hover:bg-navy-50 hover:text-navy-900"
@@ -155,11 +155,11 @@ export default function Navbar() {
 
             {user && profile ? (
               <div className="flex flex-col gap-4">
-                <div className="flex flex-col">
+                <Link href="/profile" onClick={closeMobileMenu} className="flex flex-col hover:opacity-80 transition cursor-pointer">
                   <span className="text-sm text-navy-500">Signed in as</span>
-                  <span className="text-lg font-semibold text-navy-900">{profile.name}</span>
+                  <span className="text-lg font-semibold text-navy-900 hover:text-saffron-700">{profile.name}</span>
                   <span className="text-sm font-bold uppercase tracking-wider text-saffron-700">{profile.role}</span>
-                </div>
+                </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full rounded-lg border border-navy-200 py-3 text-center text-sm font-semibold text-navy-900 shadow-sm active:bg-navy-50"

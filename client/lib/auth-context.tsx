@@ -26,6 +26,7 @@ interface AuthContextValue {
   signInAnonymouslyUser: () => Promise<void>;
   signInWithGoogle: (role?: UserRole) => Promise<void>;
   signOut: () => Promise<void>;
+  updateProfileData: (data: Partial<UserProfile>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -239,8 +240,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateProfileData = async (data: Partial<UserProfile>) => {
+    if (!profile) return;
+    const newProfile = { ...profile, ...data };
+    
+    if (isMockAuth && user && 'email' in user && typeof user.email === 'string') {
+      const mockUsers = getMockUsers();
+      if (mockUsers[user.email]) {
+        mockUsers[user.email].profile = newProfile;
+        localStorage.setItem(MOCK_USERS_KEY, JSON.stringify(mockUsers));
+      }
+      sessionStorage.setItem(MOCK_SESSION_KEY, JSON.stringify({ user, profile: newProfile }));
+    } else if (user?.uid && !isMockAuth) {
+      await setDoc(doc(db, 'users', user.uid), newProfile, { merge: true });
+      if (data.name && data.name !== profile.name && auth.currentUser) {
+        await updateProfile(auth.currentUser, { displayName: data.name });
+      }
+    }
+    setProfile(newProfile);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signIn, signUp, signInAnonymouslyUser, signInWithGoogle, signOut }}>
+    <AuthContext.Provider value={{ user, profile, loading, signIn, signUp, signInAnonymouslyUser, signInWithGoogle, signOut, updateProfileData }}>
       {children}
     </AuthContext.Provider>
   );
