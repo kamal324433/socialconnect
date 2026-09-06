@@ -27,10 +27,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${plexSans.variable} ${plexSerif.variable}`}>
-      <body>
+      <body className="flex min-h-screen flex-col overflow-x-hidden w-full">
         <AuthProvider>
           <Navbar />
-          <main className="min-h-[calc(100vh-64px)]">{children}</main>
+          <main className="flex-1 w-full">{children}</main>
           <Footer />
         </AuthProvider>
       </body>

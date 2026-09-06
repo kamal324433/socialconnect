@@ -1,14 +1,15 @@
 import Link from 'next/link';
-import { ArrowUpRight, Users2, Cpu, Building2, Handshake, ListChecks, BarChart3, Bell } from 'lucide-react';
+import { ArrowUpRight, Users2, Cpu, Building2, Handshake, ListChecks, BarChart3, Bell, TrendingUp } from 'lucide-react';
 
 const MODULES = [
-  { n: '01', icon: Users2, title: 'Citizen Engagement', body: 'Citizens, community groups, PRIs, ULBs and government departments submit challenges with photos, video, precise location and supporting documents.' },
-  { n: '02', icon: Cpu, title: 'AI Problem Management', body: 'Every submission is auto-categorized, scored for priority, checked against existing challenges for duplicates, and routed to the university best matched by subject expertise.' },
-  { n: '03', icon: Building2, title: 'University Collaboration', body: 'Higher Education Institutions review assigned challenges, form multidisciplinary teams, assign faculty mentors and submit solution proposals.' },
-  { n: '04', icon: Handshake, title: 'Industry Partnership', body: 'Industries, startups, MSMEs, CSR bodies and research institutions plug in for mentoring, co-development, funding, prototyping, piloting and technology transfer.' },
-  { n: '05', icon: ListChecks, title: 'Project Lifecycle', body: 'Milestones, deliverables, approvals, testing outcomes, IP generation and implementation status tracked end to end for every project.' },
-  { n: '06', icon: BarChart3, title: 'Visual Analytics', body: 'Real-time dashboards on submissions, participation, thematic trends, completion rates, patents, startups created and district-wise community impact.' },
-  { n: '07', icon: Bell, title: 'Notifications', body: 'Every stakeholder — citizen, university, mentor, industry partner and department — stays in sync throughout the project lifecycle.' }
+  { n: '01', icon: Users2, title: 'Citizen Engagement', body: 'Citizens, community groups, PRIs, ULBs and government departments submit challenges with photos, video, precise location and supporting documents.', href: '/citizen-engagement' },
+  { n: '02', icon: Cpu, title: 'AI Problem Management', body: 'Every submission is auto-categorized, scored for priority, checked against existing challenges for duplicates, and routed to the university best matched by subject expertise.', href: '/ai-problem-management' },
+  { n: '03', icon: Building2, title: 'University Collaboration', body: 'Higher Education Institutions review assigned challenges, form multidisciplinary teams, assign faculty mentors and submit solution proposals.', href: '/university-collaboration' },
+  { n: '04', icon: Handshake, title: 'Industry Partnership', body: 'Industries, startups, MSMEs, CSR bodies and research institutions plug in for mentoring, co-development, funding, prototyping, piloting and technology transfer.', href: '/industry-partnership' },
+  { n: '05', icon: ListChecks, title: 'Project Lifecycle', body: 'Milestones, deliverables, approvals, testing outcomes, IP generation and implementation status tracked end to end for every project.', href: '/project-lifecycle' },
+  { n: '06', icon: BarChart3, title: 'Visual Analytics', body: 'Real-time dashboards on submissions, participation, thematic trends, completion rates, patents, startups created and district-wise community impact.', href: '/visual-analytics' },
+  { n: '07', icon: Bell, title: 'Notifications', body: 'Every stakeholder — citizen, university, mentor, industry partner and department — stays in sync throughout the project lifecycle.', href: '/notifications-overview' },
+  { n: '08', icon: TrendingUp, title: 'Impact & Outcomes', body: 'Measure the real-world impact of collaborative solutions and track how challenges are transformed into meaningful outcomes.', href: '/impact-outcomes' }
 ];
 
 export default function Home() {
@@ -49,16 +50,24 @@ export default function Home() {
         <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">How a challenge becomes a solution</h2>
         <p className="mt-2 max-w-2xl text-sm text-navy-500 sm:text-base">Seven modules, one continuous workflow — from a citizen's report to a piloted, patented outcome.</p>
 
-        <div className="mt-8 grid gap-px overflow-hidden rounded-md border border-navy-100 bg-navy-100 sm:grid-cols-2 lg:grid-cols-3">
-          {MODULES.map(({ n, icon: Icon, title, body }) => (
-            <div key={n} className="bg-white p-6">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+          {MODULES.map(({ n, icon: Icon, title, body, href }) => (
+            <Link
+              key={n}
+              href={href}
+              className="group flex flex-col rounded-xl border border-navy-100 bg-white p-6 shadow-sm transition hover:border-saffron-300 hover:shadow-md"
+            >
               <div className="flex items-center gap-2 text-saffron-700">
                 <span className="font-serif text-sm">{n}</span>
                 <Icon size={16} />
               </div>
               <h3 className="mt-3 font-serif text-lg font-semibold text-navy-900">{title}</h3>
-              <p className="mt-2 text-sm text-navy-500">{body}</p>
-            </div>
+              <p className="mt-2 flex-1 text-sm text-navy-500">{body}</p>
+              <div className="mt-5 flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-saffron-700">
+                Explore
+                <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </div>
+            </Link>
           ))}
         </div>
       </section>

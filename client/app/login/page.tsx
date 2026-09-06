@@ -23,7 +23,16 @@ export default function LoginPage() {
       await signIn(email, password);
       router.push('/');
     } catch (err: any) {
-      setError('Could not sign in — check your email and password.');
+      const code = err.code || '';
+      if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/wrong-password') {
+        setError('Email ya password galat hai. Dobara check karein.');
+      } else if (code === 'auth/too-many-requests') {
+        setError('Bahut zyada attempts! Kuch der baad dobara try karein.');
+      } else if (code === 'auth/user-disabled') {
+        setError('Aapka account disable kar diya gaya hai. Admin se contact karein.');
+      } else {
+        setError('Sign in nahi ho saka. Please internet connection check karein.');
+      }
     } finally {
       setLoading(false);
     }

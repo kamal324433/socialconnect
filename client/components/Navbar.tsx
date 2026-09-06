@@ -43,13 +43,15 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-navy-100 bg-white/90 shadow-sm backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy bg-gradient-to-br from-navy to-navy-700 text-sm font-bold text-white shadow-sm">
-            SI
+        <Link href="/" className="flex items-center gap-4 transition-opacity hover:opacity-90">
+          <div className="flex flex-col sm:flex">
+            <span className="font-serif text-xl md:text-3xl font-bold tracking-tight text-navy-900 leading-none">
+              Social<span className="text-saffron-700">Connect</span>
+            </span>
+            <span className="mt-1 text-[7px] md:text-[9px] font-bold uppercase tracking-wider text-navy-600">
+              Community • Collaboration • Innovation
+            </span>
           </div>
-          <span className="font-serif text-xl font-bold tracking-tight text-navy-900 hidden sm:block">
-            Social<span className="text-saffron-700">Connect</span>
-          </span>
         </Link>
 
         {/* Desktop Navigation */}

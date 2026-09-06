@@ -16,32 +16,41 @@ const ROLES: { value: UserRole; label: string; hint: string }[] = [
   { value: 'industry', label: 'Industry / Startup / MSME / CSR', hint: 'Partner organization' }
 ];
 
-// All 24 Jharkhand districts listed first, then the rest of India
-const JHARKHAND_DISTRICTS = [
-  'Bokaro', 'Chatra', 'Deoghar', 'Dhanbad', 'Dumka', 'East Singhbhum',
-  'Garhwa', 'Giridih', 'Godda', 'Gumla', 'Hazaribagh', 'Jamtara',
-  'Khunti', 'Koderma', 'Latehar', 'Lohardaga', 'Pakur', 'Palamu',
-  'Ramgarh', 'Ranchi', 'Sahibganj', 'Seraikela Kharsawan', 'Simdega',
-  'West Singhbhum'
-];
-
-const OTHER_DISTRICTS = [
-  // Uttar Pradesh
-  'Agra', 'Aligarh', 'Allahabad', 'Bareilly', 'Ghaziabad', 'Gorakhpur',
-  'Kanpur', 'Lucknow', 'Mathura', 'Meerut', 'Moradabad', 'Noida', 'Varanasi',
-  // Bihar
-  'Bhagalpur', 'Gaya', 'Muzaffarpur', 'Nalanda', 'Patna', 'Purnia',
-  // West Bengal
-  'Asansol', 'Durgapur', 'Howrah', 'Kolkata', 'Siliguri',
-  // Delhi
-  'Central Delhi', 'East Delhi', 'New Delhi', 'North Delhi', 'South Delhi', 'West Delhi',
-  // Maharashtra
-  'Aurangabad', 'Mumbai City', 'Mumbai Suburban', 'Nagpur', 'Nashik', 'Pune',
-  // Karnataka
-  'Bangalore Urban', 'Belgaum', 'Hubli-Dharwad', 'Mangalore', 'Mysore',
-  // Other
-  'Other'
-];
+const STATE_DISTRICTS: Record<string, string[]> = {
+  'Jharkhand': [
+    'Bokaro', 'Chatra', 'Deoghar', 'Dhanbad', 'Dumka', 'East Singhbhum',
+    'Garhwa', 'Giridih', 'Godda', 'Gumla', 'Hazaribagh', 'Jamtara',
+    'Khunti', 'Koderma', 'Latehar', 'Lohardaga', 'Pakur', 'Palamu',
+    'Ramgarh', 'Ranchi', 'Sahibganj', 'Seraikela Kharsawan', 'Simdega',
+    'West Singhbhum'
+  ],
+  'Uttar Pradesh': [
+    'Agra', 'Aligarh', 'Ambedkar Nagar', 'Amethi', 'Amroha', 'Auraiya', 'Ayodhya', 'Azamgarh', 
+    'Baghpat', 'Bahraich', 'Ballia', 'Balrampur', 'Banda', 'Barabanki', 'Bareilly', 'Basti', 
+    'Bhadohi', 'Bijnor', 'Budaun', 'Bulandshahr', 'Chandauli', 'Chitrakoot', 'Deoria', 'Etah', 
+    'Etawah', 'Farrukhabad', 'Fatehpur', 'Firozabad', 'Gautam Buddha Nagar', 'Ghaziabad', 
+    'Ghazipur', 'Gonda', 'Gorakhpur', 'Hamirpur', 'Hapur', 'Hardoi', 'Hathras', 'Jalaun', 
+    'Jaunpur', 'Jhansi', 'Kannauj', 'Kanpur Dehat', 'Kanpur Nagar', 'Kasganj', 'Kaushambi', 
+    'Kheri', 'Kushinagar', 'Lalitpur', 'Lucknow', 'Maharajganj', 'Mahoba', 'Mainpuri', 'Mathura', 
+    'Mau', 'Meerut', 'Mirzapur', 'Moradabad', 'Muzaffarnagar', 'Pilibhit', 'Pratapgarh', 'Prayagraj', 
+    'Raebareli', 'Rampur', 'Saharanpur', 'Sambhal', 'Sant Kabir Nagar', 'Shahjahanpur', 'Shamli', 
+    'Shravasti', 'Siddharthnagar', 'Sitapur', 'Sonbhadra', 'Sultanpur', 'Unnao', 'Varanasi'
+  ],
+  'Bihar': [
+    'Araria', 'Arwal', 'Aurangabad', 'Banka', 'Begusarai', 'Bhagalpur', 'Bhojpur', 'Buxar',
+    'Darbhanga', 'East Champaran', 'Gaya', 'Gopalganj', 'Jamui', 'Jehanabad', 'Kaimur', 'Katihar',
+    'Khagaria', 'Kishanganj', 'Lakhisarai', 'Madhepura', 'Madhubani', 'Munger', 'Muzaffarpur',
+    'Nalanda', 'Nawada', 'Patna', 'Purnia', 'Rohtas', 'Saharsa', 'Samastipur', 'Saran',
+    'Sheikhpura', 'Sheohar', 'Sitamarhi', 'Siwan', 'Supaul', 'Vaishali', 'West Champaran'
+  ],
+  'Maharashtra': [
+    'Ahmednagar', 'Akola', 'Amravati', 'Aurangabad', 'Beed', 'Bhandara', 'Buldhana', 'Chandrapur',
+    'Dhule', 'Gadchiroli', 'Gondia', 'Hingoli', 'Jalgaon', 'Jalna', 'Kolhapur', 'Latur', 'Mumbai City',
+    'Mumbai Suburban', 'Nagpur', 'Nanded', 'Nandurbar', 'Nashik', 'Osmanabad', 'Palghar', 'Parbhani',
+    'Pune', 'Raigad', 'Ratnagiri', 'Sangli', 'Satara', 'Sindhudurg', 'Solapur', 'Thane', 'Wardha',
+    'Washim', 'Yavatmal'
+  ]
+};
 
 const ALL_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -82,7 +91,11 @@ export default function RegisterPage() {
       await signUp({ name, email, password, role, organization, district, state: stateVal, sector });
       router.push('/');
     } catch (err: any) {
-      setError(err.message?.replace('Firebase: ', '') || 'Could not create your account.');
+      if (err.code === 'auth/email-already-in-use' || err.message?.includes('email-already-in-use')) {
+        setError('Yeh email pehle se registered hai! Kripya niche "Sign in" par click karein.');
+      } else {
+        setError(err.message?.replace('Firebase: ', '') || 'Could not create your account.');
+      }
     } finally {
       setLoading(false);
     }
@@ -162,32 +175,30 @@ export default function RegisterPage() {
 
             <div>
               <label className="mb-1 block text-sm font-medium text-navy-700">District <span className="text-brick">*</span></label>
-              <div className="relative">
-                <select
+              {STATE_DISTRICTS[stateVal] ? (
+                <div className="relative">
+                  <select
+                    required
+                    value={district}
+                    onChange={(e) => setDistrict(e.target.value)}
+                    className={SELECT_CLASS}
+                  >
+                    <option value="">— Select District —</option>
+                    {STATE_DISTRICTS[stateVal].map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                  <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-navy-400">▾</span>
+                </div>
+              ) : (
+                <input
                   required
                   value={district}
                   onChange={(e) => setDistrict(e.target.value)}
-                  className={SELECT_CLASS}
-                >
-                  <option value="">— Select District —</option>
-                  {stateVal === 'Jharkhand' ? (
-                    <>
-                      <option disabled>── Jharkhand Districts ──</option>
-                      {JHARKHAND_DISTRICTS.map(d => (
-                        <option key={d} value={d}>{d}</option>
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      <option disabled>── Common Districts ──</option>
-                      {OTHER_DISTRICTS.map(d => (
-                        <option key={d} value={d}>{d}</option>
-                      ))}
-                    </>
-                  )}
-                </select>
-                <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-navy-400">▾</span>
-              </div>
+                  placeholder="Enter your district"
+                  className="w-full rounded-sm border border-navy-300 px-3 py-2 text-sm focus:border-teal focus:outline-none"
+                />
+              )}
             </div>
           </div>
 

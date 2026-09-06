@@ -3,21 +3,23 @@ import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone, ArrowUpRig
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0d1b2a] pt-12 pb-8 md:pt-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+    <footer className="w-full bg-[#0d1b2a] pt-12 pb-8 md:pt-16">
+      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6">
 
         {/* Top grid */}
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid w-full grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
 
           {/* Brand & About */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-90">
-              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-amber-400 to-orange-500 text-sm font-bold text-white shadow-sm">
-                SI
+            <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
+              <div className="flex flex-col">
+                <span className="font-serif text-lg md:text-xl font-bold tracking-tight text-white leading-none">
+                  Social<span className="text-amber-400">Connect</span>
+                </span>
+                <span className="mt-1 text-[6px] md:text-[7.5px] font-bold uppercase tracking-wider text-slate-300">
+                  Community • Collaboration • Innovation
+                </span>
               </div>
-              <span className="font-serif text-xl font-bold tracking-tight text-white">
-                Social<span className="text-amber-400">Connect</span>
-              </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-300">
               Empowering communities by connecting citizens, universities, and industries to solve real-world civic challenges through a transparent, collaborative platform.
