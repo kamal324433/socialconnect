@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone, ArrowUpRight } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Mail, MapPin, Phone, ArrowUpRight } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -25,7 +25,7 @@ export default function Footer() {
               Empowering communities by connecting citizens, universities, and industries to solve real-world civic challenges through a transparent, collaborative platform.
             </p>
             <div className="mt-6 flex items-center gap-3">
-              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
+              {[Facebook, Twitter, Instagram].map((Icon, i) => (
                 <a
                   key={i}
                   href="#"
